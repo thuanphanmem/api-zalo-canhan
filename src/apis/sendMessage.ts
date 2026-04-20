@@ -1,6 +1,5 @@
-import { ThreadType } from "../models/index.js";
 import { ZaloApiError } from "../Errors/ZaloApiError.js";
-import { apiFactory, removeUndefinedKeys } from "../utils.js";
+import { apiFactory } from "../utils.js";
 
 export type SendMessageResult = {
     msgId: number;
@@ -8,48 +7,37 @@ export type SendMessageResult = {
 
 export type SendMessageResponse = {
     message: SendMessageResult | null;
-    attachment: SendMessageResult[];
 };
 
 export const sendMessageFactory = apiFactory<SendMessageResponse>()((api, ctx, utils) => {
-    const serviceURLs = {
-        [ThreadType.User]: utils.makeURL(`${api.zpwServiceMap.chat[0]}/api/message`, {
-            nretry: 0,
-        }),
-        [ThreadType.Group]: utils.makeURL(`${api.zpwServiceMap.group[0]}/api/group`, {
-            nretry: 0,
-        }),
-    };
+    const serviceURL = utils.makeURL(`${ctx.zpwServiceMap.chat[0]}/api/message`, {
+        nretry: 0,
+    });
 
-    return async function sendMessage(message: string, threadId: string, type: ThreadType = ThreadType.User) {
+    return async function sendMessage(message: string, userId: string) {
         if (!message || !message.trim()) {
             throw new ZaloApiError("Missing message content");
         }
 
-        if (!threadId) {
-            throw new ZaloApiError("Missing threadId");
+        if (!userId) {
+            throw new ZaloApiError("Missing userId");
         }
 
-        const isGroupMessage = type === ThreadType.Group;
         const params = {
             message,
             clientId: Date.now(),
-            imei: isGroupMessage ? undefined : ctx.imei,
+            imei: ctx.imei,
             ttl: 0,
-            visibility: isGroupMessage ? 0 : undefined,
-            toid: isGroupMessage ? undefined : threadId,
-            grid: isGroupMessage ? threadId : undefined,
+            toid: userId,
         };
-
-        removeUndefinedKeys(params);
 
         const encryptedParams = utils.encodeAES(JSON.stringify(params));
         if (!encryptedParams) {
             throw new ZaloApiError("Failed to encrypt message");
         }
 
-        const url = new URL(serviceURLs[type]);
-        url.pathname += `/${isGroupMessage ? "sendmsg" : "sms"}`;
+        const url = new URL(serviceURL);
+        url.pathname += "/sms";
 
         const response = await utils.request(url.toString(), {
             method: "POST",
@@ -60,7 +48,6 @@ export const sendMessageFactory = apiFactory<SendMessageResponse>()((api, ctx, u
             const data = payload.data as SendMessageResult | null;
             return {
                 message: data,
-                attachment: [],
             };
         });
 

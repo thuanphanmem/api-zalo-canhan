@@ -1,8 +1,3 @@
-export enum ThreadType {
-    User,
-    Group,
-}
-
 export enum Gender {
     Male = 0,
     Female = 1,

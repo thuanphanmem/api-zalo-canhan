@@ -10,7 +10,7 @@ export type GetFriendRequestStatusResponse = {
 };
 
 export const getFriendRequestStatusFactory = apiFactory<GetFriendRequestStatusResponse>()((api, ctx, utils) => {
-    const serviceURL = utils.makeURL(`${api.zpwServiceMap.friend[0]}/api/friend/reqstatus`);
+    const serviceURL = utils.makeURL(`${ctx.zpwServiceMap.friend[0]}/api/friend/reqstatus`);
 
     /**
      * Get friend request status

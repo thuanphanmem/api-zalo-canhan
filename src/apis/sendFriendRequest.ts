@@ -4,7 +4,7 @@ import { apiFactory } from "../utils.js";
 export type SendFriendRequestResponse = "";
 
 export const sendFriendRequestFactory = apiFactory<SendFriendRequestResponse>()((api, ctx, utils) => {
-    const serviceURL = utils.makeURL(`${api.zpwServiceMap.friend[0]}/api/friend/sendreq`);
+    const serviceURL = utils.makeURL(`${ctx.zpwServiceMap.friend[0]}/api/friend/sendreq`);
 
     /**
      * Send a friend request to a user.

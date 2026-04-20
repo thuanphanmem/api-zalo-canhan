@@ -103,6 +103,7 @@ export class Zalo {
 
         ctx.secretKey = loginInfo.zpw_enk;
         ctx.uid = loginInfo.uid;
+        ctx.zpwServiceMap = loginInfo.zpw_service_map_v3;
         ctx.settings = serverInfo.setttings || serverInfo.settings;
         ctx.extraVer = serverInfo.extra_ver;
         ctx.loginInfo = loginInfo;
@@ -113,7 +114,7 @@ export class Zalo {
 
         logger(ctx).info("Logged in as", loginInfo.uid);
 
-        return new API(ctx, loginInfo.zpw_service_map_v3);
+        return new API(ctx);
     }
 
     public async loginQR(

@@ -8,7 +8,7 @@ export type GetMultiUsersByPhonesResponse = {
 };
 
 export const getMultiUsersByPhonesFactory = apiFactory<GetMultiUsersByPhonesResponse>()((api, ctx, utils) => {
-    const serviceURL = utils.makeURL(`${api.zpwServiceMap.friend[0]}/api/friend/profile/multiget`);
+    const serviceURL = utils.makeURL(`${ctx.zpwServiceMap.friend[0]}/api/friend/profile/multiget`);
 
     /**
      * Get multiple user(s) by their phone numbers.

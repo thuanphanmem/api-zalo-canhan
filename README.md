@@ -1,15 +1,13 @@
 # api-zalo-canhan
 
-Thư viện cộng đồng tối giản cho Zalo cá nhân, tập trung vào các nhu cầu automation cơ bản:
+Thư viện cộng đồng tối giản cho Zalo cá nhân. Repo này chỉ giữ đúng các phần phục vụ 4 việc chính:
 
-- đăng nhập bằng cookie
-- đăng nhập bằng QR
-- tìm tài khoản theo số điện thoại
-- kiểm tra trạng thái kết bạn
-- gửi lời mời kết bạn
-- gửi tin nhắn văn bản
+- đăng nhập
+- tìm user theo số điện thoại
+- kết bạn
+- nhắn tin text
 
-Repo này chủ động giữ phạm vi nhỏ để dễ vận hành và dễ bảo trì trong môi trường production.
+Để phục vụ luồng gửi tin an toàn sau khi kết bạn, repo vẫn giữ thêm API kiểm tra trạng thái kết bạn. Đây là phần bắt buộc để không nhắn tin khi quan hệ bạn bè chưa sẵn sàng.
 
 ## Cài đặt
 
@@ -36,7 +34,11 @@ const user = users["84901234567"];
 
 if (user?.uid) {
   await api.sendFriendRequest("Xin chào, mình gửi lời mời kết bạn để xác nhận đăng ký.", user.uid);
-  await api.sendMessage("Hệ thống đã ghi nhận thông tin của bạn.", user.uid);
+  const friendStatus = await api.getFriendRequestStatus(user.uid);
+
+  if (friendStatus.is_friend === 1) {
+    await api.sendMessage("Hệ thống đã ghi nhận thông tin của bạn.", user.uid);
+  }
 }
 ```
 
@@ -47,9 +49,11 @@ if (user?.uid) {
 - `api.getMultiUsersByPhones(phoneNumbers)`
 - `api.getFriendRequestStatus(userId)`
 - `api.sendFriendRequest(message, userId)`
-- `api.sendMessage(message, threadId)`
+- `api.sendMessage(message, userId)`
 
 ## Ghi chú
 
 - `sendMessage` hiện chỉ hỗ trợ tin nhắn văn bản.
-- Dự án này được định hướng như một codebase cộng đồng, ưu tiên tối giản và rõ phạm vi.
+- `sendMessage` chỉ dành cho hội thoại cá nhân 1-1.
+- Nếu vừa gửi lời mời kết bạn, nên lưu `userId` và kiểm tra lại `getFriendRequestStatus(userId)` trước khi nhắn.
+- Nếu sau lần kiểm tra đầu vẫn chưa là bạn bè, có thể lên lịch kiểm tra lại sau 24 giờ rồi mới gửi tin.

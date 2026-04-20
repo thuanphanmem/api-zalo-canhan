@@ -1,30 +1,14 @@
 import type { Agent } from "http";
 import type { CookieJar } from "tough-cookie";
 
-type ShareFileSettings = {
-    max_file: number;
-    max_size_share_file_v3: number;
-};
-
-type SocketSettings = {
-    ping_interval: number;
-};
-
 type LoginInfo = {
     uid: string;
     zpw_enk: string;
-    zpw_ws: string[];
     zpw_service_map_v3: {
         chat: string[];
-        file: string[];
         friend: string[];
-        group: string[];
     };
     [key: string]: unknown;
-};
-
-type ExtraVer = {
-    friend: string;
 };
 
 export type ZPWServiceMap = LoginInfo["zpw_service_map_v3"];
@@ -37,20 +21,10 @@ export type AppContextBase = {
     language: string;
     secretKey: string | null;
     zpwServiceMap: ZPWServiceMap;
-    settings: {
-        [key: string]: unknown;
-        features: {
-            [key: string]: unknown;
-            sharefile: ShareFileSettings;
-            socket: SocketSettings;
-        };
-    };
+    settings: Record<string, unknown>;
     loginInfo: LoginInfo;
-    extraVer: ExtraVer;
+    extraVer: unknown;
 };
-
-export type ImageMetadataGetterResponse = { width: number; height: number; size: number } | null;
-export type ImageMetadataGetter = (filePath: string) => Promise<ImageMetadataGetterResponse>;
 
 export type Options = {
     checkUpdate: boolean;
