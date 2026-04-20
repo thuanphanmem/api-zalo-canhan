@@ -1,0 +1,52 @@
+{
+  "name": "api-zalo-canhan",
+  "version": "0.1.0",
+  "description": "Dự án cộng đồng cho đăng nhập Zalo cá nhân, gửi lời mời kết bạn và nhắn tin văn bản.",
+  "main": "dist/index.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build:clean": "rimraf dist",
+    "build": "npm run build:clean && tsc -p tsconfig.json",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thuanphanmem/api-zalo-canhan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thuanphanmem/api-zalo-canhan/issues"
+  },
+  "homepage": "https://github.com/thuanphanmem/api-zalo-canhan",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "zalo",
+    "api",
+    "personal-account",
+    "friend-request",
+    "messaging"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "tough-cookie": "^5.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/node": "^20.14.10",
+    "eslint": "^9.34.0",
+    "globals": "^16.3.0",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.41.0"
+  }
+}
