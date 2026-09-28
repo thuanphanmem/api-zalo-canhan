@@ -152,6 +152,8 @@ export class Zalo {
                     cookie: loginQRResult.cookies,
                     imei,
                     userAgent: options.userAgent,
+                    display_name: loginQRResult.userInfo?.name || "",
+                    avatar: loginQRResult.userInfo?.avatar || "",
                 },
                 actions: null,
             });
